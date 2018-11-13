@@ -24,5 +24,5 @@ $ docker run -v /var/run/docker.sock:/var/run/docker.sock \
 ```
 
 ## Versioning
-The image is built and pushed to Dockerhub by [CircleCI](https://circleci.com/bb/korbitusa/docker-aws-lambda)
+The image is built and pushed to Dockerhub by [CircleCI](https://circleci.com/gh/NFhbar/docker-terratest)
 on changes to the `master` branch.
