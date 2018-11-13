@@ -1,5 +1,6 @@
 # Terratest Dockerfile
 
+[![CircleCI](https://circleci.com/gh/NFhbar/docker-terratest.svg?style=svg)](https://circleci.com/gh/NFhbar/docker-terratest)
 
 This repo contains a Docker image used to test AWS resources with Terratest, it includes:
 
