@@ -1,0 +1,47 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    working_directory: ~/docker-terratest
+    environment:
+      IMAGE_NAME: nfhbar/docker-terratest
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - ~/caches/app.tar
+      - run:
+          name: Pull Docker Image
+          command: |
+            docker pull "$IMAGE_NAME" || true
+      - run:
+          name: Build Docker image and run the tests
+          command: |
+            docker build --pull --cache-from "$IMAGE_NAME" --tag "$IMAGE_NAME" .
+            docker run -v /var/run/docker.sock:/var/run/docker.sock \
+                     -v ${PWD}:/src:ro gcr.io/gcp-runtimes/container-structure-test:latest \
+                     test --image "$IMAGE_NAME" \
+                     --config /src/tests/test_config.yaml
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p ~/caches
+            docker save -o ~/caches/app.tar ${IMAGE_NAME}:latest
+      - save_cache:
+          key: v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - ~/caches/app.tar
+      - deploy:
+          name: Push Docker image to Dockerhub
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              VERSION=$(awk '$2 == "VERSION" {print $3; exit}'  Dockerfile)
+              echo "$VERSION"
+              docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
+              docker tag "$IMAGE_NAME" "${IMAGE_NAME}:latest"
+              docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${VERSION}"
+              docker push "${IMAGE_NAME}:latest" && docker push "${IMAGE_NAME}:${VERSION}"
+            fi

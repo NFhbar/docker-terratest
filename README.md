@@ -7,7 +7,7 @@ This repo contains a Docker image used to test AWS resources with Terratest, it 
 - [Dep](https://github.com/golang/dep)
 - [Terraform](https://www.terraform.io/)
 
-The image is hosted [here](https://hub.docker.com/r/korbitusa/aws-lambda/).
+The image is hosted [here](https://hub.docker.com/r/nfhbar/docker-terratest/).
 
 ## How to use
 

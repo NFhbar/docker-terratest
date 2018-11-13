@@ -1,0 +1,31 @@
+schemaVersion: "2.0.0"
+
+metadataTest:
+  env:
+    - key: VERSION
+      value: 0.1.0
+    - key: DEP_VERSION
+      value: 0.5.1
+    - key: TERRAFORM_VERSION
+      value: 0.11.10
+
+commandTests:
+  - name:  "curl golang"
+    command: "curl"
+    args: ["-L", "-s",
+          "https://github.com/golang/dep/releases/download/v0.5.1/dep-linux-amd64",
+          "-o",
+          "/go/bin/dep"]
+  - name: "chmod go"
+    command: "chmod"
+    args: ["+x", "/go/bin/dep"]
+  - name: "curl terraform"
+    command: "curl"
+    args: ["-L", "-s",
+          "https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip",
+          "-o",
+          "/go/bin/terraform.zip"]
+fileExistenceTests:
+  - name: 'terraform.zip'
+    path: '/go/bin/'
+    shouldExist: true
