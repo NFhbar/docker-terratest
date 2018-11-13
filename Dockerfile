@@ -1,7 +1,5 @@
 FROM circleci/golang:latest
 
-WORKDIR /go/src/github.com/user
-
 ENV VERSION 0.1.0
 ENV DEP_VERSION 0.5.1
 ENV TERRAFORM_VERSION 0.11.10
